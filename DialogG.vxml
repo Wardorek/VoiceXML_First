@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<vxml version = "2.1">
+
+ 
+<form id="Main">
+
+  <field name="danecheck">
+
+   <prompt> Welcome in the system of cancellation of doctor's appointments. Please, give me your name and surname.</prompt>
+
+  <!-- Define the grammar. -->
+  <grammar xml:lang="en-us" root = "dane">
+   <rule id="dane">
+
+   <one-of>
+    <item> Anna </item>
+    <item> Wiki </item>
+    <item> Eric </item>
+   </one-of>
+
+   </rule>
+  </grammar>
+ <!-- The user was silent, restart the field. -->
+   <noinput>I did not hear anything. Please try again.<reprompt/></noinput>
+
+   <!-- The user said something that was not defined in our grammar. -->
+   <nomatch>I did not recognize that character. Please try again.<reprompt/></nomatch>
+  </field>
+
+  <filled namelist="danecheck">
+	<if cond="danecheck == 'Anna'">
+		<goto next="#PESEL"/>
+	<elseif cond="danecheck == 'Wiki'" />
+	<goto next="#PESEL"/>
+	<elseif cond="danecheck == 'Eric'" />
+	<goto next="#PESEL"/>
+	<else/>
+
+	</if>
+
+  </filled>
+</form>
+
+<form id="PESEL">
+
+  <field name="peselcheck">
+
+   <prompt> Please enter the PESEL number.</prompt>
+
+  <!-- Define the grammar. -->
+  <grammar xml:lang="en-us" root = "pesel">
+   <rule id="pesel">
+
+   <one-of>
+    <item>one</item>
+    <item>two</item>
+    <item>three</item>
+   </one-of>
+
+   </rule>
+  </grammar>
+ <!-- The user was silent, restart the field. -->
+   <noinput>I did not hear anything. Please try again.<reprompt/></noinput>
+
+   <!-- The user said something that was not defined in our grammar. -->
+   <nomatch>I did not recognize that character. Please try again.<reprompt/></nomatch>
+  </field>
+
+  <filled namelist="peselcheck">
+	<if cond="peselcheck == 'one'">	
+	<goto next="#remove"/>
+	<elseif cond="peselcheck == 'two'" />
+	<goto next="#remove"/>	
+	<elseif cond="peselcheck == 'three'" />
+	<goto next="#remove"/>
+	<else/>
+	</if>
+  </filled>
+   
+</form>
+
+
+<form id ="remove">
+
+<subdialog name="subdialog" src="subdialog.vxml">
+	<param name="quest" expr="'Please give me the name of the specialization. Internist, Dentist, Oncologist, Neurologist?'"/>
+	<filled>
+	<if cond="subdialog.specialist=='Internist'">
+	<prompt>Internist</prompt>
+	<goto next="#dead"/>
+	<elseif cond="subdialog.specialist=='Dentist'"/>
+	<prompt>Dentist</prompt>
+	<goto next="#dead"/>
+	<elseif cond="subdialog.specialist=='Oncologist'"/>
+	<prompt>Oncologist</prompt>
+	<goto next="#dead"/>
+	<elseif cond="subdialog.specialist=='Neurologist'"/>
+	<prompt>Neurologist</prompt>
+	<goto next="#dead"/>
+	<elseif/>
+	</if>
+	</filled> 
+
+</subdialog>
+</form>
+<form id="dead">
+<field name="dead">
+<prompt>A visit found. Appeal her?</prompt>
+<grammar xml:lang="en-us" root="dead">
+	<rule id="dead"> 
+	<one-of>
+		<item>Yes</item>
+		<item>No</item>				
+	</one-of>
+	</rule>
+</grammar>
+</field>
+	<filled namelist="dead"> 
+	<if cond="dead == 'Yes'">
+	<prompt>Visit canceled.</prompt>
+	<goto next="#and"/> 
+	<elseif cond="dead == 'No'"/>
+	<prompt>An irrevocable visit.</prompt>
+	<goto next="#and"/>
+	<elseif/>
+	</if>
+	</filled> 
+
+</form>
+<form id="and">
+
+<field name="and">
+<prompt>Would you cancel another visit?</prompt>
+<grammar xml:lang="en-us" root="and">
+	<rule id="and"> 
+	<one-of>
+		<item>Yes</item>
+		<item>No</item>				
+	</one-of>
+	</rule>
+</grammar>
+</field>
+	<filled namelist="and"> 
+	<if cond="and == 'Yes'">
+	<prompt>You said Yes.</prompt>
+	<goto next="#remove"/> 
+	<elseif cond="and == 'No'"/>
+	<prompt>You said No.</prompt>
+	<goto next="#end"/>
+	<elseif/>
+	</if>
+	</filled> 
+</form>
+
+<form id ="end">
+<block>
+	<field name="end">
+		<prompt>Thank you for using the application canceling medical appointments.</prompt>
+
+	</field> 
+	
+</block>
+
+</form>
+</vxml>

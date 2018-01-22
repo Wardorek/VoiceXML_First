@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1"> 
+
+<form id="subdialog">
+<var name="namelist" expr=""/>
+	<block>
+		<prompt>
+			Specialization section.
+		</prompt>
+	</block>
+
+	<field name="specialist" type="digits" cond="true" expr="namelist">
+	<grammar xml:lang="en-us" root="specialist">
+		<rule id="specialist" scope="public">
+			<one-of>
+				<item>Internist</item>
+				<item>Dentist</item> 
+				<item>Oncologist</item>
+				<item>Neurologist</item>
+			</one-of>
+		</rule>
+	</grammar>
+	 <prompt>
+      <value expr="quest" /> 
+     </prompt>
+		<filled>
+			<return namelist="specialist" />
+		</filled>
+	 </field>
+</form>
+</vxml>
